@@ -23,3 +23,8 @@ process.env.URLDB = urlDB;
 //MONGO_URI y SEED son varibales declaradas en heroku : 
 // heroku config: set SEED="este-es-el-seed-produccion"
 //para verlas es con el comando heroku config
+
+
+//Google Calient ID
+
+process.env.CLIENT_ID = process.env.CLIENT_ID || '654837506103-qd3o0ujij45iquknmma4s220gmd2sm2o.apps.googleusercontent.com';
