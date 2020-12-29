@@ -4,13 +4,14 @@ const _ = require('underscore');
 const bodyParser = require('body-parser');
 const app = express();
 const Usuario = require('../models/usuario');
+const { verificaToken, verificaRole } = require('../middlewares/autenticacion');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get('/usuario', function(req, res) {
+app.get('/usuario', verificaToken, (req, res) => {
 
     let desde = Number(req.query.desde) || 0;
     let limite = Number(req.query.limite) || 5;
@@ -37,7 +38,7 @@ app.get('/usuario', function(req, res) {
         })
 });
 
-app.post('/usuario', function(req, res) {
+app.post('/usuario', [verificaToken, verificaRole], function(req, res) {
     let body = req.body;
     let usuario = new Usuario({
         nombre: body.nombre,
@@ -61,7 +62,7 @@ app.post('/usuario', function(req, res) {
     });
 });
 
-app.put('/usuario/:id', function(req, res) {
+app.put('/usuario/:id', [verificaToken, verificaRole], function(req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
@@ -79,7 +80,7 @@ app.put('/usuario/:id', function(req, res) {
     });
 });
 
-app.delete('/usuario/:id', function(req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaRole], function(req, res) {
     let id = req.params.id;
     let cambioEstado = {
         estado: false
